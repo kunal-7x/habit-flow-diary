@@ -1,20 +1,49 @@
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei';
 import { Button } from '@/components/ui/button';
 import { Play, ArrowRight, Star, Users, Award } from 'lucide-react';
 
-const AnimatedSphere = () => {
+// Simplified animated background instead of 3D
+const AnimatedBackground = () => {
   return (
-    <Sphere visible args={[1, 100, 200]} scale={2.2}>
-      <MeshDistortMaterial
-        color="#8B5CF6"
-        attach="material"
-        distort={0.3}
-        speed={2}
-        roughness={0.1}
+    <div className="relative w-full h-full flex items-center justify-center">
+      {/* Animated circles */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 360]
+        }}
+        transition={{ 
+          duration: 20, 
+          repeat: Infinity, 
+          ease: "linear" 
+        }}
+        className="absolute w-96 h-96 rounded-full bg-gradient-primary opacity-20 blur-3xl"
       />
-    </Sphere>
+      <motion.div
+        animate={{ 
+          scale: [1.2, 1, 1.2],
+          rotate: [360, 180, 0]
+        }}
+        transition={{ 
+          duration: 25, 
+          repeat: Infinity, 
+          ease: "linear" 
+        }}
+        className="absolute w-80 h-80 rounded-full bg-gradient-secondary opacity-30 blur-2xl"
+      />
+      <motion.div
+        animate={{ 
+          scale: [1, 1.1, 1],
+          rotate: [0, -180, -360]
+        }}
+        transition={{ 
+          duration: 15, 
+          repeat: Infinity, 
+          ease: "linear" 
+        }}
+        className="absolute w-64 h-64 rounded-full bg-gradient-accent opacity-25 blur-xl"
+      />
+    </div>
   );
 };
 
@@ -130,25 +159,20 @@ export const HeroSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right Content - 3D Visualization */}
+          {/* Right Content - Animated Visualization */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="relative h-96 lg:h-[600px]"
           >
-            <Canvas camera={{ position: [0, 0, 5] }}>
-              <ambientLight intensity={0.5} />
-              <directionalLight position={[10, 10, 5]} intensity={1} />
-              <AnimatedSphere />
-              <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={1} />
-            </Canvas>
+            <AnimatedBackground />
             
             {/* Floating cards */}
             <motion.div
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-4 right-4 glass rounded-xl p-4 border border-glass-border"
+              className="absolute top-4 right-4 glass rounded-xl p-4 border border-glass-border z-10"
             >
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-accent rounded-full animate-pulse-glow" />
@@ -159,7 +183,7 @@ export const HeroSection = () => {
             <motion.div
               animate={{ y: [10, -10, 10] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-8 left-4 glass rounded-xl p-4 border border-glass-border"
+              className="absolute bottom-8 left-4 glass rounded-xl p-4 border border-glass-border z-10"
             >
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-primary rounded-full animate-pulse-glow" />
